@@ -57,7 +57,6 @@ public class HtmlMatcher {
 			
 			int indexOfSlash = -1;
 			if((indexOfSlash = tagName.indexOf("/"))==-1){
-				//This is an open tag, so simply push it into stack
 				tagStack.push(tagName);
 				
 			}else{  	
