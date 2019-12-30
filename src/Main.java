@@ -33,8 +33,7 @@ public class Main {
 			for(int i =0;i<numOfKeywords;i++)
 			{
 				String name = scanner.next();
-				double weight = scanner.nextDouble();
-				Keyword k = new Keyword(name, weight);
+				Keyword k = new Keyword(name,7);
 				keywords.add(k);
 			}
 			
