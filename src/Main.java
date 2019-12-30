@@ -19,6 +19,16 @@ public class Main {
 		while(scanner.hasNextLine()){
 			int numOfKeywords = scanner.nextInt();
 			ArrayList<Keyword> keywords = new ArrayList<Keyword>();
+			keywords.add(new Keyword("台灣",5));
+			keywords.add(new Keyword("研究所",5));
+			keywords.add(new Keyword("碩士",8));
+			keywords.add(new Keyword("推甄",8));
+			keywords.add(new Keyword("入學考試",5));
+			keywords.add(new Keyword("筆試",3));
+			keywords.add(new Keyword("口試",3));
+			keywords.add(new Keyword("出路",-3));
+			keywords.add(new Keyword("職涯",-5));
+			keywords.add(new Keyword("工作",-5));
 			
 			for(int i =0;i<numOfKeywords;i++)
 			{
