@@ -2,69 +2,62 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Map.Entry;
 
 public class Main {
 
-
 	public static void main(String[] args) throws IOException {
-		WebPage rootPage = new WebPage("https://www.google.com/search?q=%E8%B3%87%E8%A8%8A%E7%AE%A1%E7%90%86&rlz=1C1SQJL_zh-TWTW810TW811&oq=%E8%B3%87%E8%A8%8A%E7%AE%A1%E7%90%86&aqs=chrome..69i57j0l7.5296j0j7&sourceid=chrome&ie=UTF-8", "MIS");
-		WebTree tree = new WebTree(rootPage);
-		
-		tree.root.addChild(new WebNode(new WebPage("https://mis2.nccu.edu.tw/","NCCU MIS")));
-		tree.root.addChild(new WebNode(new WebPage("https://oops.udn.com/oops/story/6699/2677303","MIS vs CS")));
-		tree.root.addChild(new WebNode(new WebPage("https://www.unews.com.tw/News/Info/344","What is MIS")));
-		tree.root.addChild(new WebNode(new WebPage("https://www.dcard.tw/f/graduate_school","dcard")));
-		tree.root.addChild(new WebNode(new WebPage("https://www.ptt.cc/bbs/graduate/index.html","ptt")));
-		tree.root.addChild(new WebNode(new WebPage("https://www.ptt.cc/bbs/graduate/M.1523095685.A.A9E.html","ptt")));
-		tree.root.children.get(1).addChild(new WebNode(new WebPage("https://mis2.nccu.edu.tw/zh_tw/Admission", "NCCU MIS admission")));
-		tree.root.children.get(4).addChild(new WebNode(new WebPage("https://www.dcard.tw/search/general?forum=graduate_school&query=%E8%B3%87%E7%AE%A1", "dcard MIS")));
-		tree.root.children.get(5).addChild(new WebNode(new WebPage("https://www.ptt.cc/bbs/graduate/M.1523095685.A.A9E.html", "ptt searchMIS")));
-		tree.root.children.get(5).addChild(new WebNode(new WebPage("https://www.ptt.cc/bbs/graduate/search?q=%E8%B3%87%E7%AE%A1", "ptt MIS")));
-
-		
-		
-		
+		WebPage rootPage = new WebPage("https://www.google.com.tw/", "google");		
+	    WebTree tree = new WebTree(rootPage);
 		Scanner scanner = new Scanner(System.in);
 		while(scanner.hasNextLine()){
-			int numOfKeywords = scanner.nextInt();
-			ArrayList<Keyword> keywords = new ArrayList<Keyword>();
-			keywords.add(new Keyword("•x∆W",5));
-			keywords.add(new Keyword("¨„®s©“",5));
-			keywords.add(new Keyword("∏Í∞T∫ﬁ≤z",8));
-			keywords.add(new Keyword("∏Í∫ﬁ",8));
-			keywords.add(new Keyword("∫”§h",8));
-			keywords.add(new Keyword("±¿∫¬",8));
-			keywords.add(new Keyword("∫¬∏’",8));
-			keywords.add(new Keyword("§Jæ«¶“∏’",8));
-			keywords.add(new Keyword("§j•|",5));
-			keywords.add(new Keyword("•ø®˙",5));
-			keywords.add(new Keyword("µß∏’",3));
-			keywords.add(new Keyword("§f∏’",3));
-			keywords.add(new Keyword("¶“¨„",3));
-			keywords.add(new Keyword("•X∏Ù",-3));
-			keywords.add(new Keyword("∏Í§u",-3));
-			keywords.add(new Keyword("¬æ≤P",-5));
-			keywords.add(new Keyword("§uß@",-5));
 			
-			for(int i =0;i<numOfKeywords;i++)
-			{
-				String name = scanner.next();
-				Keyword k = new Keyword(name,7);
-				keywords.add(k);
+			ArrayList<Keyword> keywords = new ArrayList<Keyword>();		
+			keywords.add(new Keyword("Âè∞ÁÅ£",5));
+			keywords.add(new Keyword("Á†îÁ©∂ÊâÄ",5));
+			keywords.add(new Keyword("Á¢©Â£´",8));
+			keywords.add(new Keyword("Êé®ÁîÑ",8));
+			keywords.add(new Keyword("ÂÖ•Â≠∏ËÄÉË©¶",5));
+			keywords.add(new Keyword("Á≠ÜË©¶",3));
+			keywords.add(new Keyword("Âè£Ë©¶",3));
+			keywords.add(new Keyword("ËÄÉÁ†î",5));
+			keywords.add(new Keyword("Âá∫Ë∑Ø",-3));
+			keywords.add(new Keyword("ËÅ∑Ê∂Ø",-5));
+			keywords.add(new Keyword("Â∑•‰Ωú",-5));
+						
+			String name = scanner.next();
+		
+			Keyword k = new Keyword(name, 7);
+			keywords.add(k);
+					
+			try {
+				GoogleQuery google = new GoogleQuery(keywords.get(keywords.size()-1).name);
+				HashMap<String, String> query = google.query();
+				String[][] s = new String[query.size()][2];
+				
+				int num = 0;
+				for(Entry<String, String> entry : query.entrySet()) {
+				    String key = entry.getKey();
+				    String value = entry.getValue();
+				    s[num][0] = key;
+				    s[num][1] = value;
+				    num++;
+											    
+				if(num>1) {
+				tree.root.addChild(new WebNode(new WebPage(value,key)));
+				}	
+				
+				}
+				tree.setPostOrderScore(keywords);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 			
-			tree.setPostOrderScore(keywords);
 			tree.eularPrintTree();
+			
 		}
 		scanner.close();
 		
-//		try {
-//			System.out.println(new GoogleQuery("∏Í∞T∫ﬁ≤z").query());
-			
-//		} catch (IOException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 	}
 
 }
