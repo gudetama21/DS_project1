@@ -50,4 +50,20 @@ public class WebTree {
 		}
 		return retVal;
 	}
+	
+	private void sort() {
+		
+		for(int i=0;i<root.children.size()-1;i++){
+			for(int k=i+1;k<root.children.size();k++) {
+				if(root.children.get(i).nodeScore<root.children.get(k).nodeScore) {
+					WebNode n=root.children.get(i);
+					root.children.remove(i);
+					root.children.add(i, root.children.get(k-1));;
+					root.children.remove(k);
+					root.children.add(k, n);;
+					
+				}
+			}
+		}
+	}
 }
