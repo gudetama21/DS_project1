@@ -65,39 +65,27 @@ public class GoogleQuery {
 		HashMap<String, String> retVal = new HashMap<String, String>();
 		
 		Document doc = Jsoup.parse(content);
-//		System.out.println(doc.text());
+
 		Elements lis = doc.select("div");
 		lis = lis.select(".ZINbbc");
-//		System.out.println(lis.size());
-		
-		
+				
 		for(Element li : lis){
 			try 
 
 			{
-//				System.out.println(li.select(".BNeawe").get(0).text());
-//				System.out.println(li.select("a").get(0).attr("href"));
-//				for(int i = 0 ; i < block.size(); i++)
-//					System.out.println(block.get(i).text());
+				String title = li.select(".BNeawe").get(0).text();
+				String citeUrl = li.select("a").get(0).attr("href");
+				if(citeUrl.startsWith("/url?q=")) {
+					citeUrl=citeUrl.substring(7).split("&sa=", 2)[0];					
+				}
 				
-//				System.out.println(block.get(1).text());
-//				System.out.println(block.get(2).text());
-				
-//				String title = block.get(1).text();
-//				String citeUrl = block.get(2).text();
+				else if(citeUrl.startsWith("/search?")) {
+					citeUrl="https://www.google.com.tw/search?"+citeUrl.split("num=15&ie=UTF-8&oe=UTF-8&", 2)[1];
+				}
 				
 //				System.out.println(title+" "+citeUrl);
 
-//				retVal.put(title, citeUrl);
-				
-				String BNeawe = li.select(".BNeawe").get(0).text();
-				String aTag =li.select("a").get(0).attr("href");
-				for(int i = 0 ; i < lis.size(); i++)
-					System.out.println(lis.get(i).text());
-				
-				String title = lis.get(1).text();
-				String citeUrl = lis.get(2).text();
-				
+												
 				retVal.put(title, citeUrl);
 							
 
