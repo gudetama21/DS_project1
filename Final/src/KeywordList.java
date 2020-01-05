@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap; 
 import java.util.Map;
@@ -6,18 +7,37 @@ import java.util.Map;
 public class KeywordList {
 	private Keyword[] hash_table;
 	private ArrayList<Keyword> keywords = new ArrayList<>();
+	private int maxSize; 
 	
 	public KeywordList(int slots){
-		this.hash_table = new Keyword[slots];
+		maxSize = slots;
+		this.hash_table = new Keyword[maxSize];
 	}
+	
+	private int hash(int key){
+        return key % maxSize;
+    }
+	
 	
 	public void add(Keyword keyword){
-		keywords.add(keyword);
-		//System.out.println("Done");
-	}
-	
-	public void getKeyWordByCount(int count){
 		
+		int pos = hash(keyword.weight);
+		if (hash_table[pos] == null){
+			hash_table[pos] = keyword;
+//			System.out.println("Done");
+        }        
+        pos = (pos + 1) % maxSize;    
+        
+    }
+	
+	public String getKeyWordByCount(int count){
+		
+		int i = hash(count);
+		if(hash_table[i] != null)
+        {
+            return(hash_table[i].name);
+        }            
+		else return null;
 	}
 	
 	public void output(){
@@ -31,7 +51,7 @@ public class KeywordList {
 	
 	public void sort(){
 		this.keywords = doQuickSort(this.keywords);
-		System.out.println("Done");
+//		System.out.println("Done");
 	}
 	
 	private ArrayList<Keyword> doQuickSort(ArrayList<Keyword> keywords) {
@@ -47,10 +67,10 @@ public class KeywordList {
 		Keyword point = keywords.get(IndexOfList);
 		
 		for(Keyword keyword : keywords){
-			if(keyword.count < point.count){
+			if(keyword.count > point.count){
 				lt.add(keyword);
 			}
-			else if (keyword.count > point.count){
+			else if (keyword.count < point.count){
 				gt.add(keyword);
 			}
 			else {
@@ -58,11 +78,12 @@ public class KeywordList {
 			}
 		}
 		
-		retVal.addAll(doQuickSort(lt));
-		retVal.addAll(eq);
 		retVal.addAll(doQuickSort(gt));
+		retVal.addAll(eq);
+		retVal.addAll(doQuickSort(lt));
 		
 		return retVal;
 	}
+	
 	
 }

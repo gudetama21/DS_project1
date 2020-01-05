@@ -6,6 +6,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry; 
 
@@ -41,14 +43,14 @@ public class Web extends HttpServlet {
 		}
 		
 		GoogleQuery google = new GoogleQuery(request.getParameter("keyword"));
-		HashMap<String,String> query = google.query();
+		ArrayList<Result> query = google.query();
 		
 		String[][] s = new String[query.size()][2];
 		request.setAttribute("query", s);
 		int num = 0;
-		for(Entry<String, String> entry : query.entrySet()) {
-			String key = entry.getKey();
-			String value = entry.getValue();
+		for(Result entry : query) {
+			String key = entry.name;
+			String value = entry.url;
 			s[num][0] = key;
 			s[num][1] = value;
 			num++;

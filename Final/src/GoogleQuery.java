@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.ArrayList;
+
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,6 +22,7 @@ public class GoogleQuery {
 	public String url;
 
 	public String content;
+	
 
 	public GoogleQuery(String searchKeyword){
 
@@ -55,49 +58,129 @@ public class GoogleQuery {
 		return retVal;
 	}
 	
-	public HashMap<String, String> query() throws IOException{
+	
+	public ArrayList<Result> query() throws IOException{
 
 		if(content==null){
 
 			content= fetchContent();
 		}
 
-		HashMap<String, String> retVal = new HashMap<String, String>();
+		HashMap<String, String> searchResult = new HashMap<String, String>();
 		
-		Document doc = Jsoup.parse(content);
+		
+		try {
+			Document doc = Jsoup.parse(content);
+//			System.out.println(doc.text());
+//			Elements lis = doc.select("div");
+//			lis = lis.select(".ZINbbc");
+//			System.out.println(lis.size());
+		
+			Elements links = doc.select("h3.r > a"); 
+			
+			for (Element link : links) {
 
-		Elements lis = doc.select("div");
-		lis = lis.select(".ZINbbc");
-				
-		for(Element li : lis){
-			try 
+				String linkHref = link.attr("href");
+				String linkText = link.text();
+				searchResult.put(linkText,linkHref);
 
-			{
-				String title = li.select(".BNeawe").get(0).text();
-				String citeUrl = li.select("a").get(0).attr("href");
-				if(citeUrl.startsWith("/url?q=")) {
-					citeUrl=citeUrl.substring(7).split("&sa=", 2)[0];					
-				}
+			}
+
+		} catch (IndexOutOfBoundsException e)  {
+			e.printStackTrace();
+		}
+		
+		
+		KeywordList result_table = calculate(searchResult);
+		
+		ArrayList<Result> finalResult = new ArrayList<Result>();
+		
+		for(int i = 0 ; i < 1000 ; i++) {
+			if(result_table.getKeyWordByCount(i) != null) {
+				String name = result_table.getKeyWordByCount(i);
+				String resultUrl = searchResult.get(name);
+				finalResult.add(new Result(name,resultUrl));
+			}
+		}
+		
+		
+		return finalResult;
+		
+//		for(Element li : lis){
+//			try 
+
+//			{
+//				System.out.println(li.select(".BNeawe").get(0).text());
+//				System.out.println(li.select("a").get(0).attr("href"));
+//				for(int i = 0 ; i < block.size(); i++)
+		
+//					System.out.println(block.get(i).text());
 				
-				else if(citeUrl.startsWith("/search?")) {
-					citeUrl="https://www.google.com.tw/search?"+citeUrl.split("num=15&ie=UTF-8&oe=UTF-8&", 2)[1];
-				}
+//				System.out.println(block.get(1).text());
+//				System.out.println(block.get(2).text());
+				
+//				String title = block.get(1).text();
+//				String citeUrl = block.get(2).text();
 				
 //				System.out.println(title+" "+citeUrl);
 
-												
-				retVal.put(title, citeUrl);
+//				retVal.put(title, citeUrl);
+				
+//				String BNeawe = li.select(".BNeawe").get(0).text();
+//				String aTag =li.select("a").get(0).attr("href");
+//				for(int i = 0 ; i < lis.size(); i++)
+//					System.out.println(lis.get(i).text());
+				
+//				String title = lis.get(1).text();
+//				String citeUrl = lis.get(2).text();
+				
+//				result.put(title, citeUrl);
 							
 
-			} catch (IndexOutOfBoundsException e) {
+//			} catch (IndexOutOfBoundsException e) {
 
-				continue;
-			}
+//				continue;
+//			}
 
-		}
-
-		return retVal;
+//		}
 
 	}
+	
+	public KeywordList calculate(HashMap<String, String> searchResult) throws IOException{
+		
+		
+		ArrayList<Keyword> keywords = new ArrayList<Keyword>();
+		keywords.add(new Keyword("台灣",5));
+		keywords.add(new Keyword("研究所",10));
+		keywords.add(new Keyword("碩士",8));
+		keywords.add(new Keyword("推甄",8));
+		keywords.add(new Keyword("甄試",8));
+		keywords.add(new Keyword("入學考試",8));
+		keywords.add(new Keyword("大四",5));
+		keywords.add(new Keyword("正取",5));
+		keywords.add(new Keyword("筆試",3));
+		keywords.add(new Keyword("口試",3));
+		keywords.add(new Keyword("考研",3));
+		keywords.add(new Keyword("出路",-3));
+		keywords.add(new Keyword("資工",-3));
+		keywords.add(new Keyword("職涯",-5));
+		keywords.add(new Keyword("工作",-5));
+		
+		
+		KeywordList result_table = new KeywordList(1000);
+		
+		for(String key : searchResult.keySet()){
+			   String value = searchResult.get(key);
+			   WebPage rootPage = new WebPage(value,key);
+			   
+			   rootPage.setScore(keywords);
+//	           System.out.print(rootPage.name+","+rootPage.score);
+			   result_table.add(new Keyword(key,rootPage.score));
+		
+		}
+		
+		return result_table;
+	}
+	
 
 }
