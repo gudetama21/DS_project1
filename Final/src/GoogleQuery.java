@@ -73,10 +73,10 @@ public class GoogleQuery {
 		
 		for (Element li : lis) {
 			
-//			System.out.println(doc.text());
+			
 //			Elements lis = doc.select("div");
 //			lis = lis.select(".ZINbbc");
-//			System.out.println(lis.size());
+			
 			
 			try{
 				Element h3 = li.select("h3.r").get(0);
@@ -164,7 +164,6 @@ public class GoogleQuery {
 		keywords.add(new Keyword("口試",3));
 		keywords.add(new Keyword("考研",3));
 		keywords.add(new Keyword("出路",-3));
-		keywords.add(new Keyword("資工",-3));
 		keywords.add(new Keyword("職涯",-5));
 		keywords.add(new Keyword("工作",-5));
 		
