@@ -162,7 +162,6 @@ public class GoogleQuery {
 		keywords.add(new Keyword("口試",3));
 		keywords.add(new Keyword("考研",3));
 		keywords.add(new Keyword("出路",-3));
-		keywords.add(new Keyword("資工",-3));
 		keywords.add(new Keyword("職涯",-5));
 		keywords.add(new Keyword("工作",-5));
 		
