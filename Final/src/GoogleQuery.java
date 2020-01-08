@@ -68,42 +68,43 @@ public class GoogleQuery {
 
 		HashMap<String, String> searchResult = new HashMap<String, String>();
 		
+		Document doc = Jsoup.parse(content);
+		Elements lis = doc.select("div.g"); 
 		
-		try {
-			Document doc = Jsoup.parse(content);
+		for (Element li : lis) {
+			
 //			System.out.println(doc.text());
 //			Elements lis = doc.select("div");
 //			lis = lis.select(".ZINbbc");
 //			System.out.println(lis.size());
-		
-			Elements links = doc.select("h3.r > a"); 
 			
-			for (Element link : links) {
+			try{
+				Element h3 = li.select("h3.r").get(0);
+				String title = h3.text();
+				Element cite = li.getElementsByTag("a").first();
+				String citeUrl = cite.attr("href");
+				citeUrl = citeUrl.substring(7, citeUrl.indexOf("&sa=U&ved"));
 
-				String linkHref = link.attr("href");
-				String linkText = link.text();
-				searchResult.put(linkText,linkHref);
+				searchResult.put(citeUrl, title);
 
-			}
-
-		} catch (IndexOutOfBoundsException e)  {
+			} catch (IndexOutOfBoundsException e)  {
 			e.printStackTrace();
+			}
 		}
-		
 		
 		KeywordList result_table = calculate(searchResult);
 		
 		ArrayList<Result> finalResult = new ArrayList<Result>();
-		
-		for(int i = 0 ; i < 1000 ; i++) {
+	
+		for(int i = finalResult.size() ; i > 0 ; i--) {
 			if(result_table.getKeyWordByCount(i) != null) {
 				String name = result_table.getKeyWordByCount(i);
 				String resultUrl = searchResult.get(name);
 				finalResult.add(new Result(name,resultUrl));
 			}
 		}
-		
-		
+	
+	
 		return finalResult;
 		
 //		for(Element li : lis){
@@ -146,6 +147,7 @@ public class GoogleQuery {
 
 	}
 	
+	
 	public KeywordList calculate(HashMap<String, String> searchResult) throws IOException{
 		
 		
@@ -162,11 +164,12 @@ public class GoogleQuery {
 		keywords.add(new Keyword("口試",3));
 		keywords.add(new Keyword("考研",3));
 		keywords.add(new Keyword("出路",-3));
+		keywords.add(new Keyword("資工",-3));
 		keywords.add(new Keyword("職涯",-5));
 		keywords.add(new Keyword("工作",-5));
 		
 		
-		KeywordList result_table = new KeywordList(1000);
+		KeywordList result_table = new KeywordList(100);
 		
 		for(String key : searchResult.keySet()){
 			   String value = searchResult.get(key);
@@ -181,5 +184,4 @@ public class GoogleQuery {
 		return result_table;
 	}
 	
-
 }

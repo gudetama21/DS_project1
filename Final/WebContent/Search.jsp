@@ -4,12 +4,31 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>GoogleSearch</title>
+<title>	MasterSearch</title>
 </head>
-<body>
-<form action= '${requestUri}' method='get'>
-<input type='text' name='keyword' placeholder='關鍵字'/>
-<input type='submit' value='搜尋' />
+<body bgColor="#BBFFEE">
+<center>
+	<form action= '${requestUri}' method='get'>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<H1><font color=steelblue>Master Search</font></H1>
+		<br>
+		<input type='text' name='keyword' placeholder='關鍵字'/>
+		<input type='submit' value='搜尋' />
+		<br>
+		<br>
+		<input type="button" value="Dcard" onclick="location.href='https://www.dcard.tw/f/graduate_school'"> 
+		<input type="button" value="PTT" onclick="location.href='https://www.ptt.cc/bbs/graduate/index.html '"> 
+
+
+	</form>
+</center>
 </form>
 </body>
 </html>

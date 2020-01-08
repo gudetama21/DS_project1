@@ -51,7 +51,7 @@ public class KeywordList {
 	
 	public void sort(){
 		this.keywords = doQuickSort(this.keywords);
-//		System.out.println("Done");
+
 	}
 	
 	private ArrayList<Keyword> doQuickSort(ArrayList<Keyword> keywords) {
