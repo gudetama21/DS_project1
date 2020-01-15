@@ -64,28 +64,31 @@ public class GoogleQuery {
 		if(content==null){
 
 			content= fetchContent();
+//			System.out.println(content);
 		}
 
 		HashMap<String, String> searchResult = new HashMap<String, String>();
 		
 		Document doc = Jsoup.parse(content);
-		Elements lis = doc.select("div.g"); 
-		
-		for (Element li : lis) {
-			
-			
-//			Elements lis = doc.select("div");
-//			lis = lis.select(".ZINbbc");
-			
-			
-			try{
-				Element h3 = li.select("h3.r").get(0);
-				String title = h3.text();
-				Element cite = li.getElementsByTag("a").first();
-				String citeUrl = cite.attr("href");
-				citeUrl = citeUrl.substring(7, citeUrl.indexOf("&sa=U&ved"));
+//		System.out.println(doc.text());
+		Elements lis = doc.select("div");
+		lis = lis.select(".ZINbbc");
+//		System.out.println(lis.size());
 
-				searchResult.put(citeUrl, title);
+		
+		for(Element li : lis)
+		{
+			try 
+
+			{
+				Elements select = li.select("a[title]");
+				if (select!=null&&select.size()>0) {
+				String linkHref = select.get(0).attr("href");//獲取href值
+                String linkText = select.get(0).text();//獲取text
+
+				searchResult.put(linkHref, linkText);
+				System.out.println(linkHref + linkText);}
+
 
 			} catch (IndexOutOfBoundsException e)  {
 			e.printStackTrace();
@@ -164,6 +167,7 @@ public class GoogleQuery {
 		keywords.add(new Keyword("口試",3));
 		keywords.add(new Keyword("考研",3));
 		keywords.add(new Keyword("出路",-3));
+		keywords.add(new Keyword("資工",-3));
 		keywords.add(new Keyword("職涯",-5));
 		keywords.add(new Keyword("工作",-5));
 		

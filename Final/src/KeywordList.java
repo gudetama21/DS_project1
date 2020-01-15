@@ -22,10 +22,8 @@ public class KeywordList {
 	public void add(Keyword keyword){
 		
 		int pos = hash(keyword.weight);
-		if (hash_table[pos] == null){
-			hash_table[pos] = keyword;
-//			System.out.println("Done");
-        }        
+		hash_table[pos] = keyword;
+//		System.out.println("Done");      
         pos = (pos + 1) % maxSize;    
         
     }

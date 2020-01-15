@@ -16,8 +16,8 @@
 		<br>
 		<br>
 		<br>
-		<br>
 		<H1><font color=steelblue>Master Search</font></H1>
+		<H3><font color=#008888>Search Engine for Graduate Schools in Taiwan</font></H3>
 		<br>
 		<input type='text' name='keyword' placeholder='關鍵字'/>
 		<input type='submit' value='搜尋' />
